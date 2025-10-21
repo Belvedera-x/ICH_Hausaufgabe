@@ -1,1 +1,1 @@
-# Hausaufgabe: Database, Linux, Python, Auto QA
+# Hausaufgabe: Linux, Python, Auto QA
