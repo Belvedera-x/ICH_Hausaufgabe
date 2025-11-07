@@ -1,6 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import pytest
+from time import sleep
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 
@@ -54,11 +57,17 @@ def test_batton_ru(driver):
     assert link.is_displayed()
 
 def test_phone(driver):
-    driver.get("https://itcareerhub.de/ru/contact-us#popup-close")
+    driver.get("https://itcareerhub.de/ru/contact-us")
     phone = driver.find_element(By.CSS_SELECTOR, ".tn-elem__11949824661710153310161")
     phone.click()
-    driver.implicitly_wait(5)
-    click_text = driver.find_element(By.TAG_NAME, "Если вы не дозвонились, заполните форму на сайте. Мы свяжемся с вами")
+    # sleep(1)
+    # click_text = driver.find_element(By.CSS_SELECTOR, ".t396__elem.tn-elem.tn-elem__11949836861711363912027 > div")
+    wait = WebDriverWait(driver, 6)
+    click_text = wait.until(
+        EC.element_to_be_clickable(
+            (By.CSS_SELECTOR, ".t396__elem.tn-elem.tn-elem__11949836861711363912027 > div")
+        )
+    )
     assert click_text.text == "Если вы не дозвонились, заполните форму на сайте. Мы свяжемся с вами"
 
 
