@@ -1,18 +1,22 @@
 import pytest
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-
+from selenium.webdriver.chrome.options import Options
 from QA_Auto.Hausaufgabe_6.pages.checkout_page import CheckoutPage
 from QA_Auto.Hausaufgabe_6.pages.inventory_page import InventoryPage
 from QA_Auto.Hausaufgabe_6.pages.login_page import LoginPage
 from QA_Auto.Hausaufgabe_6.pages.cart_page import CartPage
+from QA_Auto.Hausaufgabe_6.pages.name_adres_page import NameAdresPage
 
 
 @pytest.fixture(scope="function")
 def driver():
-    driver = webdriver.Chrome()
+    chrome_options = Options()
+    chrome_options.add_argument("--incognito")   # добавил режим инкогнито
+
+    driver = webdriver.Chrome(options=chrome_options)
     driver.maximize_window()
     driver.get("https://www.saucedemo.com/")
+
     yield driver
     driver.quit()
 
@@ -22,6 +26,7 @@ def test_total(driver):
     login = LoginPage(driver)
     inventory = InventoryPage(driver)
     cart = CartPage(driver)
+    get_name = NameAdresPage(driver)
 
     login.success_login("standard_user", "secret_sauce")
 
@@ -33,12 +38,10 @@ def test_total(driver):
 
     cart.click_checkout()
 
-    login.add_firstname("Ivan")
-    login.add_lastname("Ivanov")
-    login.add_postalcode("12345678")
-
-
-    driver.find_element(By.ID, "continue").click()
+    get_name.add_firstname("Ivan")
+    get_name.add_lastname("Ivanov")
+    get_name.add_postalcode("12345678")
+    get_name.get_continue().click()
 
     checkout = CheckoutPage(driver)
     assert "$58.29" in checkout.get_total()
