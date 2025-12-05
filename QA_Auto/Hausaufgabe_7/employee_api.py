@@ -5,6 +5,15 @@ class EmployeeApi:
     def __init__(self, url):
         self.url = url
 
+    def get_token(self, user, password):
+        """Получить токен авторизации"""
+        creds = {"username": user, "password": password}
+        resp = requests.post(self.url + '/auth', json=creds)
+        assert resp.status_code == 200, f"Ошибка: ожидался статус 200, получен {resp.status_code}"
+        return resp.json()["token"]
+
+
+
     def create_employee(self, name):
         """Создать employee"""
         employee = {
